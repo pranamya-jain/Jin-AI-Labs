@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Brain, Zap, BarChart3, Cpu, Workflow, Bot, Database, Sparkles, ArrowRight, X, Menu, Home, Briefcase, Users, Phone, Info } from 'lucide-react';
+
+// Lazy load components
+const AboutSection = lazy(() => import('./components/AboutSection.jsx'));
+const ServicesSection = lazy(() => import('./components/ServicesSection.jsx'));
+const PortfolioSection = lazy(() => import('./components/PortfolioSection.jsx'));
+const ProcessSection = lazy(() => import('./components/ProcessSection.jsx'));
+const ContactSection = lazy(() => import('./components/ContactSection.jsx'));
 
 const FloatingCard = ({ 
   icon: Icon, 
@@ -109,12 +116,6 @@ function App() {
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCardStackHovered, setIsCardStackHovered] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    message: ''
-  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -188,19 +189,6 @@ function App() {
     } else {
       console.error('Element not found:', sectionId);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Thank you for your message! We\'ll get back to you soon.');
-    setFormData({ name: '', email: '', company: '', message: '' });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
   };
 
   const services = [
@@ -306,168 +294,6 @@ function App() {
         "Academic collaboration",
         "Patent development",
         "Innovation labs"
-      ]
-    }
-  ];
-
-  const detailedServices = [
-    {
-      icon: Brain,
-      title: "Custom AI Solutions",
-      description: "Tailored artificial intelligence systems designed to solve your specific business challenges and automate complex processes.",
-      features: [
-        "Machine Learning Models",
-        "Natural Language Processing",
-        "Computer Vision",
-        "Predictive Analytics",
-        "Recommendation Systems"
-      ]
-    },
-    {
-      icon: Zap,
-      title: "AI Automation",
-      description: "Intelligent automation solutions that streamline workflows and eliminate repetitive tasks.",
-      features: [
-        "Process Automation",
-        "Workflow Optimization",
-        "Decision Systems",
-        "RPA Integration",
-        "Smart Scheduling"
-      ]
-    },
-    {
-      icon: BarChart3,
-      title: "Data Analytics",
-      description: "Transform your data into actionable insights with advanced analytics and visualization.",
-      features: [
-        "Big Data Processing",
-        "Real-time Analytics",
-        "Business Intelligence",
-        "Data Visualization",
-        "Statistical Modeling"
-      ]
-    },
-    {
-      icon: Cpu,
-      title: "Neural Networks",
-      description: "Custom neural network architectures designed for your specific use cases.",
-      features: [
-        "Deep Learning",
-        "Convolutional Networks",
-        "Recurrent Networks",
-        "Transformer Models",
-        "Custom Architectures"
-      ]
-    },
-    {
-      icon: Workflow,
-      title: "AI Integration",
-      description: "Seamlessly integrate AI capabilities into your existing systems and workflows.",
-      features: [
-        "API Development",
-        "Cloud Deployment",
-        "System Integration",
-        "Microservices",
-        "Legacy Modernization"
-      ]
-    },
-    {
-      icon: Bot,
-      title: "Intelligent Agents",
-      description: "Autonomous AI agents that can understand, reason, and act on your behalf.",
-      features: [
-        "Conversational AI",
-        "Virtual Assistants",
-        "Multi-agent Systems",
-        "Autonomous Decision Making",
-        "Context Understanding"
-      ]
-    }
-  ];
-
-  const projects = [
-    {
-      number: "01",
-      title: "HireAI",
-      year: "2024",
-      description: "A recruitment automation platform that streamlines the hiring process using AI-powered candidate screening and matching algorithms. Built with React, Node.js, and TensorFlow, resulting in 70% faster hiring cycles.",
-      technologies: ["React", "Node.js", "TensorFlow", "MongoDB"],
-      impact: "70% faster hiring cycles"
-    },
-    {
-      number: "02",
-      title: "RAG Report Generator",
-      year: "2024",
-      description: "An intelligent document analysis system using Retrieval-Augmented Generation to automatically generate comprehensive reports from complex data sources. Reduced report generation time by 85%.",
-      technologies: ["Python", "LangChain", "OpenAI", "Vector DB"],
-      impact: "85% time reduction"
-    },
-    {
-      number: "03",
-      title: "Smart Analytics Dashboard",
-      year: "2024",
-      description: "Real-time business intelligence platform with predictive analytics capabilities. Features interactive visualizations and automated insights generation, improving decision-making speed by 60%.",
-      technologies: ["Vue.js", "D3.js", "Python", "PostgreSQL"],
-      impact: "60% faster decisions"
-    },
-    {
-      number: "04",
-      title: "Voice Assistant Integration",
-      year: "2024",
-      description: "Custom voice-enabled interface for enterprise applications using natural language processing. Integrated with existing workflows to provide hands-free operation and accessibility improvements.",
-      technologies: ["Speech API", "NLP", "WebRTC", "AWS"],
-      impact: "100% accessibility improvement"
-    },
-    {
-      number: "05",
-      title: "Automated Content Pipeline",
-      year: "2024",
-      description: "AI-powered content generation and distribution system that creates, optimizes, and schedules content across multiple platforms. Increased content output by 300% while maintaining quality.",
-      technologies: ["GPT-4", "Automation", "CMS", "Analytics"],
-      impact: "300% content increase"
-    },
-    {
-      number: "06",
-      title: "Predictive Maintenance System",
-      year: "2024",
-      description: "IoT-enabled predictive maintenance platform using machine learning to forecast equipment failures. Reduced downtime by 45% and maintenance costs by 30% for manufacturing clients.",
-      technologies: ["IoT", "ML", "Time Series", "Edge Computing"],
-      impact: "45% downtime reduction"
-    }
-  ];
-
-  const processSteps = [
-    {
-      icon: "🔍",
-      title: "(Step 1) Discovery",
-      description: "Together, we dive into your world. A brainstorming session where your challenges meet our creative thinking",
-      points: [
-        "We learn from you",
-        "Identify painpoints",
-        "Uncover opportunities",
-        "Flag inefficiencies"
-      ]
-    },
-    {
-      icon: "📊",
-      title: "(Step 2) Analysis",
-      description: "We craft a tailored action plan that aligns with your budget and requirements – no guesswork, just solutions",
-      points: [
-        "We build for you",
-        "Compatible with your stack",
-        "Designed for the end user",
-        "Future ready & modular"
-      ]
-    },
-    {
-      icon: "🚀",
-      title: "(Step 3) Execution",
-      description: "It's go time. Our team gets to work, setting plans into motion, turning ideas into real-world impact",
-      points: [
-        "We keep you looped",
-        "Regular status calls",
-        "Open line of communication",
-        "Documentation & support"
       ]
     }
   ];
@@ -625,223 +451,24 @@ function App() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="services-page">
-        <div className="container">
-          <div className="page-header">
-            <h2 className="section-title">What we do</h2>
-            <p className="section-subtitle">
-              We bring GenAI integration & engineering expertise
-            </p>
-            <p className="section-description">
-              Each problem is looked at from a fresh lens to provide you with a solution that solves your specific requirements and integrates with your existing infrastructure
-            </p>
-          </div>
-
-          <div className="services-grid">
-            {detailedServices.map((service, index) => (
-              <div key={index} className="service-card-detailed">
-                <div className="service-icon-large">
-                  <service.icon className="w-8 h-8" />
-                </div>
-                <h3 className="service-title-large">{service.title}</h3>
-                <p className="service-description-large">{service.description}</p>
-                <ul className="service-features">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx}>{feature}</li>
-                  ))}
-                </ul>
-                <button className="service-cta">
-                  Learn More
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <div className="feature-box">
-            <h3 className="feature-title">Magical user experiences</h3>
-            <p className="feature-description">We create personalized experiences that engage users and drive meaningful interactions through innovative design and advanced technology integration.</p>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<div>Loading Services...</div>}>
+        <ServicesSection />
+      </Suspense>
 
       {/* Portfolio Section */}
-      <section id="portfolio" className="portfolio-page">
-        <div className="container">
-          <div className="page-header">
-            <h2 className="section-title">Our Work</h2>
-            <p className="section-subtitle">
-              Showcasing innovative AI solutions that drive real business impact
-            </p>
-          </div>
-
-          <div className="portfolio-grid-detailed">
-            {projects.map((project, index) => (
-              <div key={index} className="project-card-detailed">
-                <div className="project-number-large">{project.number}</div>
-                <div className="project-content">
-                  <h3 className="project-title-large">{project.title}</h3>
-                  <p className="project-year">Built in {project.year}</p>
-                  <p className="project-description-large">{project.description}</p>
-                  
-                  <div className="project-technologies">
-                    <h4>Technologies Used:</h4>
-                    <div className="tech-tags">
-                      {project.technologies.map((tech, idx) => (
-                        <span key={idx} className="tech-tag">{tech}</span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="project-impact">
-                    <strong>Impact: {project.impact}</strong>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<div>Loading Portfolio...</div>}>
+        <PortfolioSection />
+      </Suspense>
 
       {/* About Section */}
-      <section id="about" className="about-page">
-        <div className="container">
-          <div className="page-header">
-            <h2 className="section-title">How we work</h2>
-            <p className="section-subtitle">
-              Our proven process for delivering exceptional AI solutions
-            </p>
-          </div>
-
-          <div className="about-content">
-            <div className="process-section">
-              <div className="process-grid">
-                {processSteps.map((step, index) => (
-                  <div key={index} className="process-step">
-                    <div className="step-icon">{step.icon}</div>
-                    <h3 className="step-title">{step.title}</h3>
-                    <p className="step-description">{step.description}</p>
-                    <ul className="step-points">
-                      {step.points.map((point, idx) => (
-                        <li key={idx}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="about-section">
-              <h3 className="feature-title">Why Choose Us</h3>
-              <div className="why-choose-grid">
-                <div className="why-choose-item">
-                  <h4>Expertise</h4>
-                  <p>Deep knowledge in AI, machine learning, and automation technologies</p>
-                </div>
-                <div className="why-choose-item">
-                  <h4>Custom Solutions</h4>
-                  <p>Tailored approaches that fit your specific business needs and constraints</p>
-                </div>
-                <div className="why-choose-item">
-                  <h4>Proven Results</h4>
-                  <p>Track record of delivering measurable business impact and ROI</p>
-                </div>
-                <div className="why-choose-item">
-                  <h4>Future-Ready</h4>
-                  <p>Solutions designed to scale and evolve with your business</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<div>Loading About...</div>}>
+        <AboutSection />
+      </Suspense>
 
       {/* Contact Section */}
-      <section id="contact" className="contact-page">
-        <div className="container">
-          <div className="page-header">
-            <h2 className="section-title">Ready to Upgrade?</h2>
-            <p className="section-subtitle">
-              Dive into the future with Jin-AI Labs. Get in touch and build out a smarter, more automated org.
-            </p>
-          </div>
-
-          <div className="contact-content">
-            <div className="contact-info">
-              <h3>Let's Talk</h3>
-              <p>
-                Ready to transform your business with AI? We're here to help you build something amazing.
-              </p>
-              
-              <div className="contact-details">
-                <div className="contact-item">
-                  <h4>Location</h4>
-                  <p>Bangalore, India</p>
-                </div>
-                <div className="contact-item">
-                  <h4>Email</h4>
-                  <p>hello@jin-ai-labs.com</p>
-                </div>
-                <div className="contact-item">
-                  <h4>Founded</h4>
-                  <p>Tinkering since 2025</p>
-                </div>
-              </div>
-            </div>
-
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label">Name</label>
-                <input 
-                  type="text" 
-                  name="name"
-                  className="form-input" 
-                  value={formData.name}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Email</label>
-                <input 
-                  type="email" 
-                  name="email"
-                  className="form-input" 
-                  value={formData.email}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Company</label>
-                <input 
-                  type="text" 
-                  name="company"
-                  className="form-input" 
-                  value={formData.company}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Project Description</label>
-                <textarea 
-                  name="message"
-                  className="form-textarea" 
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
-              
-              <button type="submit" className="submit-btn">Send Message</button>
-            </form>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<div>Loading Contact...</div>}>
+        <ContactSection />
+      </Suspense>
 
       {/* Footer */}
       <footer className="main-footer">
